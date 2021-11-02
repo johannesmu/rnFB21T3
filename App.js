@@ -9,7 +9,7 @@ import { Signin } from './components/Signin'
 import { Home } from './components/Home';
 // firebase
 import { firebaseConfig } from './Config';
-import {initializeApp} from 'firebase/app'
+import {initializeApp,} from 'firebase/app'
 
 initializeApp( firebaseConfig)
 
@@ -20,8 +20,21 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Signin" component={Signin} />
+        <Stack.Screen 
+          name="Signup" 
+          component={Signup} 
+          options={{ 
+            title: 'Sign up'
+          }}
+        />
+        <Stack.Screen 
+          name="Signin" 
+          component={Signin} 
+          options={{
+            title:'Sign in'
+          }}
+        />
+        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );
