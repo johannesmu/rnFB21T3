@@ -49,7 +49,7 @@ export function Signup(props) {
 
   useEffect( () => {
     if( props.auth === true ) {
-      navigation.navigate('Home')
+      navigation.reset({ index: 0, routes: [ {name: 'Home'} ] })
     }
   }, [props.auth])
 
