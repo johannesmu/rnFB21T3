@@ -8,6 +8,9 @@ export function Signup(props) {
   const[validPassword,setValidPassword ] = useState( false )
   const[validForm,setValidForm] = useState(false)
 
+  const[email,setEmail] = useState()
+  const[password,setPassword] = useState()
+
   const navigation = useNavigation()
 
   const validateEmail = ( emailVal ) => {
@@ -17,6 +20,7 @@ export function Signup(props) {
     else {
       setValidEmail( false )
     }
+    setEmail( emailVal )
   }
 
   const validatePassword = ( passwordVal ) => {
@@ -26,6 +30,12 @@ export function Signup(props) {
     else {
       setValidPassword( false )
     }
+    setPassword( passwordVal )
+  }
+
+  const submitHandler = () => {
+    console.log('submitting')
+    props.handler( email, password )
   }
 
   useEffect( () => {
@@ -37,6 +47,12 @@ export function Signup(props) {
     }
   }, [validEmail, validPassword])
 
+  useEffect( () => {
+    if( props.auth === true ) {
+      navigation.navigate('Home')
+    }
+  }, [props.auth])
+
   return (
     <View style={styles.container}>
       <Text>Sign up</Text>
@@ -47,8 +63,16 @@ export function Signup(props) {
         <Text>Email</Text>
         <TextInput style={styles.input} onChangeText={ (val) => validateEmail(val) }/>
         <Text>Password</Text>
-        <TextInput style={styles.input} onChangeText={ (val) => validatePassword(val) } />
-        <TouchableOpacity style={styles.button}>
+        <TextInput 
+        style={styles.input} 
+        onChangeText={ (val) => validatePassword(val) }
+        secureTextEntry={true} 
+        />
+        <TouchableOpacity 
+          style={ (validForm) ? styles.button : styles.buttonDisabled} 
+          disabled={ (validForm) ? false : true }
+          onPress={ () => submitHandler() }
+        >
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
         <Text>Already have an account?</Text>
@@ -70,6 +94,12 @@ const styles = StyleSheet.create( {
   button: {
     marginVertical: 15,
     backgroundColor: ThemeColours.cerise,
+    padding: 10,
+    borderRadius: 10,
+  },
+  buttonDisabled: {
+    marginVertical: 15,
+    backgroundColor: ThemeColours.ceriseLight,
     padding: 10,
     borderRadius: 10,
   },
