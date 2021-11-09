@@ -20,6 +20,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const[ auth, setAuth ] = useState()
   const[ user, setUser ] = useState()
+  const [ signupError, setSignupError ] = useState()
 
   const SignupHandler = ( email, password ) => {
     const auth = getAuth()
@@ -29,7 +30,10 @@ export default function App() {
       setUser(userCredential)
       setAuth( true )
     } )
-    .catch( (error) => { console.log(error) })
+    .catch( (error) => { 
+      console.log(error) 
+      setSignupError( error.message )
+    })
   }
 
   const SignOutHandler = () => {
@@ -48,7 +52,13 @@ export default function App() {
           name="Signup" 
           options={{title: 'Sign up'}}
         >
-          { (props) => <Signup {...props} handler={SignupHandler} auth={auth} /> }
+          { 
+            (props) => <Signup {...props} 
+                        handler={SignupHandler} 
+                        auth={auth} 
+                        error={signupError} 
+                        /> 
+            }
         </Stack.Screen>
         <Stack.Screen 
           name="Signin" 

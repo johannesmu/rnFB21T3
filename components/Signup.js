@@ -116,6 +116,7 @@ export function Signup(props) {
           >
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
+          <Feedback text={props.error} />
           <View style={styles.meta} >
             <Text style={styles.metaText} >Already have an account?</Text>
             <TouchableOpacity style={styles.metaLink} onPress={ () => navigation.navigate("Signin") }>
