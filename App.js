@@ -10,7 +10,7 @@ import { Home } from './components/Home';
 // firebase
 import { firebaseConfig } from './Config';
 import {initializeApp,} from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signOut } from "firebase/auth"
 
 initializeApp( firebaseConfig)
 
@@ -32,18 +32,22 @@ export default function App() {
     .catch( (error) => { console.log(error) })
   }
 
+  const SignOutHandler = () => {
+    console.log('signing out...')
+    const auth = getAuth()
+    signOut( auth )
+    .then( () => { setAuth(false) })
+    .catch( (error) => console.log(error) )
+  }
+
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen 
+        <Stack.Screen 
           name="Signup" 
-          component={Signup} 
-          options={{ 
-            title: 'Sign up'
-          }}
-        /> */}
-        <Stack.Screen name="Signup" options={{title: 'Sign up'}}>
+          options={{title: 'Sign up'}}
+        >
           { (props) => <Signup {...props} handler={SignupHandler} auth={auth} /> }
         </Stack.Screen>
         <Stack.Screen 
@@ -53,7 +57,9 @@ export default function App() {
             title:'Sign in'
           }}
         />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" options={{title: 'Home'}} >
+          { (props) => <Home {...props} signout={SignOutHandler} auth={auth} /> }
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
