@@ -36,13 +36,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen 
-          name="Signup" 
-          component={Signup} 
-          options={{ 
-            title: 'Sign up'
-          }}
-        /> */}
         <Stack.Screen name="Signup" options={{title: 'Sign up'}}>
           { (props) => <Signup {...props} handler={SignupHandler} auth={auth} /> }
         </Stack.Screen>
