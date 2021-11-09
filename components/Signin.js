@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, StyleSheet, Button, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { ThemeColours } from './ThemeColours';
+import { Feedback } from './Feedback';
 
 export function Signin ( props ) {
   const navigation = useNavigation()
+
+  useEffect( () => {
+    if( props.auth === true ) {
+      navigation.reset({ index: 0, routes: [ {name: 'Home'} ] })
+    }
+  }, [props.auth] )
+
   return(
     <View style={styles.container}>
       <Text>Sign up</Text>
@@ -15,10 +23,11 @@ export function Signin ( props ) {
         <Text>Email</Text>
         <TextInput style={styles.input} />
         <Text>Password</Text>
-        <TextInput style={styles.input} />
+        <TextInput style={styles.input} secureTextEntry={true} />
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Sign up</Text>
+          <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
+        <Feedback message={props.error} />
         <Text>Don't have an account?</Text>
         <Button title="Sign up for an account" onPress={() => navigation.navigate("Signup")} />
       </View>
