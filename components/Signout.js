@@ -1,8 +1,14 @@
+import React from 'react'
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
-export function Signout() {
+export function Signout( props ) {
+  const pressHandler = () => {
+    props.handler()
+  }
   return(
-    <TouchableOpacity>
-      <Text>Signout</Text>
+    <TouchableOpacity 
+      onPress={ pressHandler }
+    >
+      <Text>{props.text}</Text>
     </TouchableOpacity>
   )
 }
