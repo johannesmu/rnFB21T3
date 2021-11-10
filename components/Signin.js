@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Button, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { ThemeColours } from './ThemeColours';
@@ -6,12 +6,16 @@ import { Feedback } from './Feedback';
 
 export function Signin ( props ) {
   const navigation = useNavigation()
+  const [email,setEmail] = useState()
+  const [password, setPassword] = useState()
 
   useEffect( () => {
     if( props.auth === true ) {
       navigation.reset({ index: 0, routes: [ {name: 'Home'} ] })
     }
   }, [props.auth] )
+
+
 
   return(
     <View style={styles.container}>
@@ -21,10 +25,16 @@ export function Signin ( props ) {
       >
       <View style={styles.inner}>
         <Text>Email</Text>
-        <TextInput style={styles.input} />
+        <TextInput 
+          style={styles.input} 
+          onChangeText={ (val) => setEmail(val) } 
+        />
         <Text>Password</Text>
-        <TextInput style={styles.input} secureTextEntry={true} />
-        <TouchableOpacity style={styles.button}>
+        <TextInput style={styles.input} 
+          secureTextEntry={true} 
+          onChangeText={ (val) => setPassword(val) } 
+        />
+        <TouchableOpacity style={styles.button} onPress={ () => { props.handler(email,password) }}>
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
         <Feedback message={props.error} />
