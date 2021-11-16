@@ -61,6 +61,7 @@ export default function App() {
   }
 
   const SignoutHandler = () => {
+    //console.log('signing out...')
     signOut( FBauth ).then( () => {
       setAuth( false )
       setUser( null )
@@ -92,13 +93,12 @@ export default function App() {
           handler={SigninHandler} 
           /> }
         </Stack.Screen>
-        <Stack.Screen name="Home">
+        <Stack.Screen name="Home" options={{
+          headerTitle: "Home",
+          headerRight: (props) => <Signout {...props} handler={SignoutHandler} />
+        }}>
           { (props) => 
           <Home {...props} auth={auth} 
-          options={{
-            headerTitle: "Test",
-            headerRight: (props) => (<Signout {...props} />)
-          }}
           /> }
         </Stack.Screen>
       </Stack.Navigator>
