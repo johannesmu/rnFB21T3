@@ -12,10 +12,12 @@ import { Signout } from './components/Signout';
 import { firebaseConfig } from './Config';
 import {initializeApp,} from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { initializeFirestore, getFirestore, setDoc, doc, addDoc, collection } from 'firebase/firestore'
 
 
-initializeApp( firebaseConfig)
-
+const app = initializeApp( firebaseConfig)
+const FSdb = initializeFirestore(app, {useFetchStreams: false})
+const FBauth = getAuth()
 
 const Stack = createNativeStackNavigator();
 
@@ -25,13 +27,14 @@ export default function App() {
   const [signupError, setSignupError ] = useState()
   const [signinError, setSigninError ] = useState()
 
-  const FBauth = getAuth()
+  
 
   useEffect(() => {
     onAuthStateChanged( FBauth, (user) => {
       if( user ) { 
         setAuth(true) 
         setUser(user)
+        console.log( 'authed')
       }
       else {
         setAuth(false)
@@ -44,7 +47,7 @@ export default function App() {
     setSignupError(null)
     createUserWithEmailAndPassword( FBauth, email, password )
     .then( ( userCredential ) => { 
-      setUser(userCredential)
+      setUser(userCredential.user)
       setAuth( true )
     } )
     .catch( (error) => { setSignupError(error.code) })
@@ -53,20 +56,29 @@ export default function App() {
   const SigninHandler = ( email, password ) => {
     signInWithEmailAndPassword( FBauth, email, password )
     .then( (userCredential) => {
-      setUser(userCredential)
+      setUser(userCredential.user)
       setAuth(true)
     })
-    .catch( (error) => { setSigninError(error.code) })
+    .catch( (error) => { 
+      const message = (error.code.includes('/') ) ? error.code.split('/')[1].replace(/-/g, ' ') : error.code
+      setSigninError(message) 
+    })
   }
 
   const SignoutHandler = () => {
-    //console.log('signing out...')
     signOut( FBauth ).then( () => {
       setAuth( false )
       setUser( null )
     })
     .catch( (error) => console.log(error.code) )
   }
+
+  const addData = async ( FScollection , data ) => {
+    //adding data to a collection with automatic id
+    const ref = await addDoc( collection(FSdb, FScollection ), data )
+  }
+
+
 
   return (
     <NavigationContainer>
@@ -97,7 +109,7 @@ export default function App() {
           headerRight: (props) => <Signout {...props} handler={SignoutHandler} />
         }}>
           { (props) => 
-          <Home {...props} auth={auth} /> }
+          <Home {...props} auth={auth} add={addData} /> }
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
