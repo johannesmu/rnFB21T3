@@ -12,6 +12,8 @@ export function Feedback ( props ) {
 
 const styles= StyleSheet.create({
   text: {
-    color: ThemeColours.cultured
+    color: ThemeColours.cultured,
+    textAlign: 'center',
+    padding: 10,
   },
 })
