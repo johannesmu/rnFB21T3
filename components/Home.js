@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from 'react'
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import { ThemeColours } from './ThemeColours';
 
 export function Home ( props ) {
   const navigation = useNavigation()
@@ -11,9 +12,21 @@ export function Home ( props ) {
    }
   }, [props.auth])
 
+  const data = { time: new Date().getTime(), user: 'test'}
+
   return(
     <View>
       <Text>Home</Text>
+      <TouchableOpacity style={styles.button} onPress={ () => { props.add('cities', data ) }}>
+        <Text>Add something</Text>
+      </TouchableOpacity>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: ThemeColours.turquoise,
+    padding: 10,
+  },
+})
