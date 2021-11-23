@@ -59,6 +59,7 @@ export default function App() {
     .then( (userCredential) => {
       setUser(userCredential.user)
       setAuth(true)
+      console.log( userCredential.user.uid)
     })
     .catch( (error) => { 
       const message = (error.code.includes('/') ) ? error.code.split('/')[1].replace(/-/g, ' ') : error.code
@@ -76,7 +77,9 @@ export default function App() {
 
   const addData = async ( FScollection , data ) => {
     //adding data to a collection with automatic id
-    const ref = await addDoc( collection(FSdb, FScollection ), data )
+    //const ref = await addDoc( collection(FSdb, FScollection ), data )
+    const ref = await setDoc( doc( FSdb, `users/${user.uid}/documents/${ new Date().getTime() }`), data )
+    //console.log( ref.id )
   }
 
 
