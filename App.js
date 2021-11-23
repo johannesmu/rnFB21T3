@@ -12,11 +12,12 @@ import { Signout } from './components/Signout';
 import { firebaseConfig } from './Config';
 import {initializeApp,} from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
+
 import { initializeFirestore, getFirestore, setDoc, doc, addDoc, collection } from 'firebase/firestore'
 
 
-const app = initializeApp( firebaseConfig)
-const FSdb = initializeFirestore(app, {useFetchStreams: false})
+const FBapp = initializeApp( firebaseConfig)
+const FSdb = initializeFirestore(FBapp, {useFetchStreams: false})
 const FBauth = getAuth()
 
 const Stack = createNativeStackNavigator();
