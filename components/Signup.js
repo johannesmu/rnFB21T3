@@ -35,7 +35,6 @@ export function Signup(props) {
   }
 
   const submitHandler = () => {
-    console.log('submitting')
     props.handler( email, password )
   }
 
