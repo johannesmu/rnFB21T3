@@ -13,7 +13,17 @@ import { firebaseConfig } from './Config';
 import {initializeApp,} from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
 
-import { initializeFirestore, getFirestore, setDoc, doc, addDoc, collection } from 'firebase/firestore'
+import { 
+  initializeFirestore, 
+  getFirestore, 
+  setDoc, 
+  doc, 
+  addDoc, 
+  collection,
+  query, 
+  where, 
+  onSnapshot 
+} from 'firebase/firestore'
 
 
 const FBapp = initializeApp( firebaseConfig)
@@ -27,15 +37,16 @@ export default function App() {
   const[ user, setUser ] = useState()
   const [signupError, setSignupError ] = useState()
   const [signinError, setSigninError ] = useState()
+  const [ data, setData ] = useState()
 
-  
 
   useEffect(() => {
     onAuthStateChanged( FBauth, (user) => {
       if( user ) { 
         setAuth(true) 
         setUser(user)
-        console.log( 'authed')
+        // console.log( 'authed')
+        if( !data ) { getData() }
       }
       else {
         setAuth(false)
@@ -43,6 +54,12 @@ export default function App() {
       }
     })
   })
+
+  // useEffect( () => {
+  //   if( !data && user ) {
+  //     getData()
+  //   }
+  // }, [data,auth, user])
 
   const SignupHandler = ( email, password ) => {
     setSignupError(null)
@@ -82,6 +99,21 @@ export default function App() {
     //console.log( ref.id )
   }
 
+  const getData = () => {
+    // console.log('...getting data', user)
+    const FSquery = query( collection( FSdb, `users/${user.uid}/documents`) )
+    const unsubscribe = onSnapshot( FSquery, ( querySnapshot ) => {
+      let FSdata = []
+      querySnapshot.forEach( (doc) => {
+        let item = {}
+        item = doc.data()
+        item.id = doc.id
+        FSdata.push( item )
+      })
+      setData( FSdata )
+    })
+  }
+
 
 
   return (
@@ -110,10 +142,10 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Home" options={{
           headerTitle: "Home",
-          headerRight: (props) => <Signout {...props} handler={SignoutHandler} />
+          headerRight: (props) => <Signout {...props} handler={SignoutHandler} user={user}/>
         }}>
           { (props) => 
-          <Home {...props} auth={auth} add={addData} /> }
+          <Home {...props} auth={auth} add={addData} data={ data } /> }
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
