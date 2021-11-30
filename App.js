@@ -8,6 +8,7 @@ import { Signup } from './components/Signup'
 import { Signin } from './components/Signin'
 import { Home } from './components/Home';
 import { Signout } from './components/Signout';
+import { Detail } from './components/Detail'
 // firebase
 import { firebaseConfig } from './Config';
 import {initializeApp,} from 'firebase/app'
@@ -146,6 +147,11 @@ export default function App() {
         }}>
           { (props) => 
           <Home {...props} auth={auth} add={addData} data={ data } /> }
+        </Stack.Screen>
+        <Stack.Screen name="Detail" options={{
+          headerTitle: "Item detail"
+        }}>
+          { (props) => <Detail {...props}  />  }
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

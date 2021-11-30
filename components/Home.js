@@ -20,8 +20,18 @@ export function Home ( props ) {
 
   const data = { time: new Date().getTime(), user: Math.random() * 100 }
 
+  const onClick = (itemId) => {
+    console.log( itemId )
+    navigation.navigate('Detail', {id: itemId } )
+  }
+
   const renderItem = ({item}) => (
-    <View><Text>{item.time}</Text></View>
+    <View style={styles.item} >
+      <Text onPress={ () => onClick(item.id) }>
+        time: {item.time}
+        id: {item.id}
+      </Text>
+    </View>
   )
 
   return(
@@ -39,5 +49,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: ThemeColours.turquoise,
     padding: 10,
+  },
+  item: {
+    padding: 10,
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
   },
 })
