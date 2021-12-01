@@ -1,17 +1,33 @@
 import React, {useEffect,useState} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { ThemeColours } from './ThemeColours';
 
 export function Detail ( props ) {
-  const [id, setId] = useState()
-  const [time,setTime] = useState()
-  const [user, setUser] = useState()
-  return(
-    <View>
-      <Text>id: {id}</Text>
-      <Text>time: {time}</Text>
-      <Text>user: {user}</Text>
-    </View>
-  )
+  const [ data, setData ] = useState()
+
+  const route = useRoute()
+  const {id } = route.params
+
+  useEffect( () => {
+    if( !data ) {
+      props.get( id )
+      .then( (document) => setData(document) )
+      .catch( (error) => console.log(error) )
+    }
+  })
+
+  if( !data ) {
+    return <Text>Loading...</Text>
+  }
+  else{
+    return(
+      <View>
+        <Text>id: {data.id}</Text>
+        <Text>time: {data.time}</Text>
+        <Text>user: {data.user}</Text>
+      </View>
+    )
+  }
+  
 }

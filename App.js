@@ -20,6 +20,7 @@ import {
   setDoc, 
   doc, 
   addDoc, 
+  getDoc,
   collection,
   query, 
   where, 
@@ -115,6 +116,22 @@ export default function App() {
     })
   }
 
+  const getDetail = async ( id ) => {
+    const docRef = doc( FSdb, `users/${user.uid}/documents`, id )
+    const docData = await getDoc( docRef )
+    return new Promise( ( resolve, reject ) => {
+      if( docData.exists() ) {
+        let document = docData.data()
+        document.id = id
+        resolve( document )
+      }
+      else {
+        reject('no such document')
+      }
+    })
+    
+  }
+
 
 
   return (
@@ -151,7 +168,7 @@ export default function App() {
         <Stack.Screen name="Detail" options={{
           headerTitle: "Item detail"
         }}>
-          { (props) => <Detail {...props}  />  }
+          { (props) => <Detail {...props} get={getDetail}  />  }
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

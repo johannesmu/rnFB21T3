@@ -20,14 +20,14 @@ export function Home ( props ) {
 
   const data = { time: new Date().getTime(), user: Math.random() * 100 }
 
-  const onClick = (itemId) => {
-    console.log( itemId )
-    navigation.navigate('Detail', {id: itemId } )
+  const onClick = (item) => {
+    console.log( item.id )
+    navigation.navigate('Detail', {id: item.id, time: item.time, user: item.user } )
   }
 
   const renderItem = ({item}) => (
     <View style={styles.item} >
-      <Text onPress={ () => onClick(item.id) }>
+      <Text onPress={ () => onClick(item) }>
         time: {item.time}
         id: {item.id}
       </Text>
